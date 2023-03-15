@@ -2,3 +2,9 @@
 .ipynb_checkpoints
 __pycache__
 .DS_Store
+*.aux
+*.fdb_latexmk
+*.tex
+*.fls
+*.log
+*.synctex.gz

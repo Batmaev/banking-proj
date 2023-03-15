@@ -104,7 +104,7 @@ class Transaction:
         return Transaction(self.From, self.To, -self.amount)._perform_without_checking_permissions() # pylint: disable=protected-access
 
 
-class TransactionList:
+class TransactionsHistory:
     """Класс для хранения истории транзакций, играющий роль БД.
     Есть у каждого счёта.
 
@@ -134,7 +134,7 @@ class Account:
         self.id = uuid4()
         self.client = client
         self.balance = 0
-        self.history: "TransactionList" = TransactionList()
+        self.history: "TransactionsHistory" = TransactionsHistory()
 
     def check_withdraw_permissions(self, transaction: "Transaction") -> "BoolWithReason": # pylint: disable=unused-argument
         """Проверяет, можно ли совершить транзакцию со счёта данного типа."""

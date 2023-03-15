@@ -69,12 +69,12 @@ class Transaction {
 
 Transaction <-- "2" Account
 
-class "TransactionList (История операций)" as TransactionList {
+class TransactionsHistory {
     + transactions: Set[Transaction]
     + append(transaction): None
 }
 
-TransactionList *-- Transaction
-Account <-- TransactionList
+TransactionsHistory *-- Transaction
+Account <-- TransactionsHistory
 
 @enduml
