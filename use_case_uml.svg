@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="430px" preserveAspectRatio="none" style="width:590px;height:430px;background:#FFFFFF;" version="1.1" viewBox="0 0 590 430" width="590px" zoomAndPan="magnify"><defs/><g><!--MD5=[5fbed5ba970ca0d58ec934107ab8aa59]
+cluster ClientFacade--><g id="cluster_ClientFacade"><path d="M167,6 L259,6 A3.75,3.75 0 0 1 261.5,8.5 L268.5,28.4883 L341,28.4883 A2.5,2.5 0 0 1 343.5,30.9883 L343.5,281.5 A2.5,2.5 0 0 1 341,284 L167,284 A2.5,2.5 0 0 1 164.5,281.5 L164.5,8.5 A2.5,2.5 0 0 1 167,6 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="164.5" x2="268.5" y1="28.4883" y2="28.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="91" x="168.5" y="21.5352">ClientFacade</text></g><!--MD5=[8786af6f4f218b0510396aaa38ef803e]
+cluster Transaction--><g id="cluster_Transaction"><path d="M428.5,81 L514.5,81 A3.75,3.75 0 0 1 517,83.5 L524,103.4883 L558.5,103.4883 A2.5,2.5 0 0 1 561,105.9883 L561,223.5 A2.5,2.5 0 0 1 558.5,226 L428.5,226 A2.5,2.5 0 0 1 426,223.5 L426,83.5 A2.5,2.5 0 0 1 428.5,81 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="426" x2="524" y1="103.4883" y2="103.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="85" x="430" y="96.5352">Transaction</text></g><!--MD5=[9335d2f113eeee04d63a1d87ceda1e90]
+cluster ClientObject--><g id="cluster_ClientObject"><path d="M406.5,271 L497.5,271 A3.75,3.75 0 0 1 500,273.5 L507,293.4883 L580.5,293.4883 A2.5,2.5 0 0 1 583,295.9883 L583,418.5 A2.5,2.5 0 0 1 580.5,421 L406.5,421 A2.5,2.5 0 0 1 404,418.5 L404,273.5 A2.5,2.5 0 0 1 406.5,271 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="404" x2="507" y1="293.4883" y2="293.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="90" x="408" y="286.5352">ClientObject</text></g><g id="elem_create_account_facade"><ellipse cx="254.2488" cy="251.1498" fill="#F1F1F1" rx="73.7488" ry="17.1498" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="202.7488" y="254.4408">create_account</text></g><g id="elem_deposit"><ellipse cx="254.1104" cy="184.1754" fill="#F1F1F1" rx="47.6104" ry="14.6754" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="51" x="226.9389" y="187.9038">deposit</text></g><g id="elem_withdraw"><ellipse cx="253.9349" cy="56.2473" fill="#F1F1F1" rx="56.4349" ry="14.7473" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="219.4349" y="60.2649">withdraw</text></g><g id="elem_transfer"><ellipse cx="253.7967" cy="120.1909" fill="#F1F1F1" rx="49.7967" ry="14.6909" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="224.354" y="124.0922">transfer</text></g><g id="elem_perform"><ellipse cx="493.2674" cy="131.2036" fill="#F1F1F1" rx="51.2674" ry="14.7036" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="56" x="462.2893" y="135.2167">perform</text></g><g id="elem_cancel"><ellipse cx="493.3909" cy="195.159" fill="#F1F1F1" rx="41.8909" ry="14.659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="471.8909" y="198.45">cancel</text></g><g id="elem_Edit"><ellipse cx="493.6033" cy="389.7838" fill="#F1F1F1" rx="61.6033" ry="14.7838" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70" x="455.6033" y="393.8013">Edit Fileds</text></g><g id="elem_create_account"><ellipse cx="493.7488" cy="323.1498" fill="#F1F1F1" rx="73.7488" ry="17.1498" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="442.2488" y="326.4408">create_account</text></g><!--MD5=[fee662a292a0353a69bd162820bae93b]
+entity User--><g id="elem_User"><ellipse cx="47" cy="130" fill="#F1F1F1" rx="16" ry="16" style="stroke:#181818;stroke-width:1.5;"/><path d="M47,150 C51,150 54,150 58,146 C66,146 74,154 74,162 L74,166 C74,170 70,174 66,174 L28,174 C24,174 20,170 20,166 L20,162 C20,154 28,146 36,146 C40,150 43,150 47,150 " fill="#F1F1F1" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="31" x="31.5" y="189.0352">User</text></g><!--MD5=[97ab183161fd5d1db7fba7485cf76add]
+entity Admin--><g id="elem_Admin"><ellipse cx="47" cy="340" fill="#F1F1F1" rx="16" ry="16" style="stroke:#181818;stroke-width:1.5;"/><path d="M47,360 C51,360 54,360 58,356 C66,356 74,364 74,372 L74,376 C74,380 70,384 66,384 L28,384 C24,384 20,380 20,376 L20,372 C20,364 28,356 36,356 C40,360 43,360 47,360 " fill="#F1F1F1" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82" x="6" y="399.0352">Bank Admin</text></g><g id="elem_CreateClient"><ellipse cx="254.099" cy="401.1198" fill="#F1F1F1" rx="106.099" ry="23.6198" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="177" x="165.599" y="404.4108">Create Client Step by Step</text></g><g id="elem_Cancel"><ellipse cx="254.0312" cy="323.0062" fill="#F1F1F1" rx="85.5312" ry="19.5062" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="131" x="188.5312" y="326.2973">Cancel Transaction</text></g><!--MD5=[f2accc43ede2e0bf42360f57c661a1cd]
+link User to create_account_facade--><g id="link_User_create_account_facade"><path d="M75.79,172.44 C95.28,186.1 122.33,203.74 148,216 C166.21,224.69 187.14,232.14 205.5,237.91 " fill="none" id="User-create_account_facade" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[fb08389bd2ee680ed52314e64f737c96]
+link User to deposit--><g id="link_User_deposit"><path d="M75.65,156.32 C110.4,161.74 170.4,171.11 210.88,177.42 " fill="none" id="User-deposit" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[48280bc347f4bc9850749f08f76d2c98]
+link User to withdraw--><g id="link_User_withdraw"><path d="M75.69,131.34 C95.13,117.59 122.18,99.92 148,88 C168.16,78.69 191.71,71.23 211.4,65.86 " fill="none" id="User-withdraw" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[559d56f0b489eb144107b507cf754c98]
+link User to transfer--><g id="link_User_transfer"><path d="M75.65,147.68 C109.96,142.33 168.89,133.13 209.34,126.82 " fill="none" id="User-transfer" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[609e7c9879b5e61e0eb781524d5b6d41]
+link deposit to perform--><g id="link_deposit_perform"><path d="M293.16,175.48 C336.69,165.77 407.59,149.95 452.05,140.03 " fill="none" id="deposit-perform" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6a63b72d3010640d8bb2cd4505b8abbc]
+link withdraw to perform--><g id="link_withdraw_perform"><path d="M291.98,67.09 C312.12,73.18 337.46,80.91 360,88 C393.68,98.6 432.04,111.09 458.79,119.87 " fill="none" id="withdraw-perform" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[34fbc37307cd8a7a387cac99762021a0]
+link transfer to perform--><g id="link_transfer_perform"><path d="M303.63,122.25 C344.08,124.13 401.42,126.78 442.29,128.67 " fill="none" id="transfer-perform" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[50cdb7c488fed76a568a400bf4a19fa6]
+link create_account_facade to create_account--><g id="link_create_account_facade_create_account"><path d="M299.95,264.63 C342.31,277.47 405.43,296.6 447.73,309.43 " fill="none" id="create_account_facade-create_account" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[e72c094ea0d3355b7360167e7990bc42]
+link Admin to CreateClient--><g id="link_Admin_CreateClient"><path d="M88.01,369.61 C112.02,374.18 143.41,380.15 172.37,385.66 " fill="none" id="Admin-CreateClient" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[8ce4fc0ce9dd5f210acddd0d5cbbc53e]
+link CreateClient to Edit--><g id="link_CreateClient_Edit"><path d="M358.13,396.22 C383.55,395.05 409.93,393.82 432.52,392.78 " fill="none" id="CreateClient-Edit" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[299e2dc963e2e356ddb5ab50dd16573d]
+link Admin to Cancel--><g id="link_Admin_Cancel"><path d="M88.01,354.39 C116.21,349.02 154.61,341.72 187.27,335.5 " fill="none" id="Admin-Cancel" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[f93b3b794b012de03b564a6e37700052]
+link Cancel to cancel--><g id="link_Cancel_cancel"><path d="M305.44,306.99 C323.08,300.68 342.78,292.82 360,284 C403.9,261.5 450.81,227.26 475.32,208.49 " fill="none" id="Cancel-cancel" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[b7a2a00db7e8fd155b7af65607f8185f]
+@startuml use_case_uml
+
+skinparam actorStyle awesome
+left to right direction
+
+package ClientFacade {
+    (create_account) as create_account_facade
+    (deposit)
+    (withdraw)
+    (transfer)
+}
+
+actor User
+User - - create_account_facade
+User - - deposit
+User - - withdraw
+User - - transfer
+
+
+package Transaction {
+    (perform)
+    (cancel)
+}
+deposit - - perform
+withdraw - - perform
+transfer - - perform
+
+package ClientObject {
+    (Edit Fileds) as Edit
+    (create_account)
+}
+create_account_facade - - create_account
+
+actor "Bank Admin" as Admin
+
+(Create Client Step by Step) as CreateClient
+Admin - - CreateClient
+CreateClient - - Edit
+
+(Cancel Transaction) as Cancel
+
+Admin - - Cancel
+Cancel - - cancel
+' cancel -> perform
+
+' package "Account Transaction History" {
+'     (save)
+' }
+' perform - - save
+
+
+@enduml
+
+@startuml use_case_uml
+
+skinparam actorStyle awesome
+left to right direction
+
+package ClientFacade {
+    (create_account) as create_account_facade
+    (deposit)
+    (withdraw)
+    (transfer)
+}
+
+actor User
+User - - create_account_facade
+User - - deposit
+User - - withdraw
+User - - transfer
+
+
+package Transaction {
+    (perform)
+    (cancel)
+}
+deposit - - perform
+withdraw - - perform
+transfer - - perform
+
+package ClientObject {
+    (Edit Fileds) as Edit
+    (create_account)
+}
+create_account_facade - - create_account
+
+actor "Bank Admin" as Admin
+
+(Create Client Step by Step) as CreateClient
+Admin - - CreateClient
+CreateClient - - Edit
+
+(Cancel Transaction) as Cancel
+
+Admin - - Cancel
+Cancel - - cancel
+
+
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 20:01:30 MSK 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: ru
+Country: RU
+--></g></svg>
