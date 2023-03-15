@@ -1,15 +1,26 @@
 @startuml classes_uml
 
+class ClientFacade {
+    + client: Client
+
+    + create_account(): Account
+    + withdraw(amount): Transaction
+    + deposit(amount): Transaction
+    + transfer(amount, from_account, to_account_id, bank): Transaction
+}
+
+ClientFacade <-- Client
+
 class Client {
     + bank: Bank
     + name: str
     + surname: str
-    + passport: str?
-    + address: str?
+    + passport: str | None
+    + address: str | None
     + accounts: Dict[uuid, Account]
 
     + create_account(): Account
-    + check_privileges(amount): bool
+    + check_withdraw_permissions(transaction): BoolWithReason
 }
 
 interface Account {
@@ -17,25 +28,33 @@ interface Account {
     + client: Client
     + balance: int
 
-    + add(amonut): None
-    + subtract(amount): None
+    + check_withdraw_permissions(transaction): BoolWithReason
 }
-
-Account <-- Client
 
 Account <|-- DebitAccount
 Account <|-- DepositAccount
 Account <|-- CreditAccount
 Account <|-- CashAccount
 
+class DepositAccount {
+    end_date: datetime
+}
+
+class CreditAccount {
+    + credit_limit: int
+    + interest_rate: float
+}
+
 
 class Bank {
     + accounts: Dict[uuid, Account]
-    + transaction_list: TransactionList
     + unathorized_withdrawal_limit: int
 }
 
 Client <-- Bank
+Bank *-- Account
+Client *-- Account
+Account <-- Client
 
 class Transaction {
     + From: Account
@@ -44,15 +63,18 @@ class Transaction {
     + date: datetime
 
     + perform(): Transaction
+    + cancel(): Transaction
+    + check_permissions(): BoolWithReason
 }
 
 Transaction <-- "2" Account
 
-class TransactionList {
+class "TransactionList (История операций)" as TransactionList {
     + transactions: Set[Transaction]
     + append(transaction): None
 }
 
 TransactionList *-- Transaction
+Account <-- TransactionList
 
 @enduml
