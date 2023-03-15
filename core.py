@@ -121,7 +121,7 @@ class TransactionsHistory:
 
 
 class Account:
-    """Базовый класс для счётов.
+    """Базовый класс для банковских счетов.
     Cодержит поля:
         - id: UUID4
         - client: Client
@@ -193,7 +193,8 @@ class Bank:
 class Client:
     """Класс c информацией о клиенте,
     содержит в том числе словарь со счетами и ссылку на банк."""
-    def __init__(self, bank: "Bank", name: str, surname: str, passport: str | None = None, address: str | None = None):
+    def __init__(self, bank: "Bank", name: str, surname: str,
+                 passport: str | None = None, address: str | None = None):
         self.bank = bank
         self.name = name
         self.surname = surname
@@ -213,8 +214,9 @@ class Client:
         """Проверяет, можно ли совершить транзакцию с учётом документов клиента.
 
         Если у клиента нет паспорта или адреса,
-        то он может переводить средства между своими счетами,
-        но может за раз снять / перевести только до определённого предела, установленного банком."""
+        то он может без ограничений переводить средства между своими счетами,
+        но может за раз снять / перевести другому человеку только
+        до определённого предела, установленного банком."""
 
         if self.passport is None or self.address is None:
             if isinstance(transaction.To, CashAccount) or transaction.To.client != self:
@@ -244,7 +246,8 @@ class ClientFacade:
                  amount: int, to_bank: Bank | None = None) -> "Transaction":
         """Создаёт транзакцию перевода средств по номеру счёта и выполняет её.
 
-        Если банк не указан, то считается, что счёт находится в том же банке, что и клиент."""
+        Если банк не указан, то считается, что счёт получателя находится 
+        в том же банке, что и счёт отправителя."""
         if to_bank is None:
             to_bank = self.client.bank
         if to_account_id not in to_bank.accounts:
