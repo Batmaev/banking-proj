@@ -4,9 +4,9 @@ class ClientFacade {
     + client: Client
 
     + create_account(): Account
-    + withdraw(amount): Transaction
-    + deposit(amount): Transaction
-    + transfer(amount, from_account, to_account_id, bank): Transaction
+    + withdraw(amount): BoolWithReason
+    + deposit(amount): BoolWithReason
+    + transfer(amount, from_account, to_account_id, bank): BoolWithReason
 }
 
 ClientFacade <-- Client
@@ -62,16 +62,16 @@ class Transaction {
     + amount: int
     + date: datetime
 
-    + perform(): Transaction
-    + cancel(): Transaction
+    + perform(): BoolWithReason
+    + cancel(): BoolWithReason
     + check_permissions(): BoolWithReason
 }
 
 Transaction <-- "2" Account
 
 class TransactionsHistory {
-    + transactions: Set[Transaction]
-    + append(transaction): None
+    + save(transaction): None
+    + see(): List[Transaction]
 }
 
 TransactionsHistory *-- Transaction
