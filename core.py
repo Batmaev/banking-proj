@@ -71,8 +71,9 @@ class Transaction:
         
         Использование:
         ```python
-        transaction.check_all_permissions().raise_if_false()
-        transaction.mirror.check_all_permissions().raise_if_false() 
+        if transaction.check_permissions() \\
+        & transaction.mirror.check_permissions():
+            transaction.perform()
         ```
         Вторая проверка нужна, если у операции отрицательный amount.
         """
