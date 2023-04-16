@@ -1,5 +1,32 @@
 @startuml classes_uml
 
+class ServerState {
+    + banks: BankDict
+    + client_facades: ClientFacadeDict
+    ___
+    + banks.__getitem__(name): Bank
+    + client_facades.__getitem__(UUID): ClientFacade
+}
+
+ServerState --* Bank
+ServerState --* ClientFacade
+
+protocol json_interface {
+    .. Superuser ..
+    + create_bank(...): JSON
+    + create_client(...): JSON
+    + update_client(...): JSON
+    .. Client ..
+    + create_account(...): JSON
+    + withdraw(...): JSON
+    + deposit(...): JSON
+    + transfer(...): JSON
+    + show_accounts(...): JSON
+    + show_history(...): JSON
+}
+
+ServerState -- json_interface
+
 class ClientFacade {
     + client: Client
 
@@ -67,7 +94,7 @@ class Transaction {
     + check_permissions(): BoolWithReason
 }
 
-Transaction --> "2" Account
+Transaction -> "2" Account
 
 class TransactionsHistory {
     + save(transaction): None
