@@ -1,6 +1,6 @@
 """Модуль с основными классами банка."""
 
-from typing import Dict, Set, List, Type
+from typing import Dict, List, Type, Any
 from uuid import uuid4, UUID
 from datetime import date, datetime
 
@@ -112,6 +112,16 @@ class Transaction:
     def __repr__(self) -> str:
         return f'{str(self.From)} -> {str(self.To)}: {self.amount} at {self.datetime}'
 
+    def info(self) -> Dict:
+        """Возвращает словарь с информацией о транзакции."""
+        return {
+            'id': self.id,
+            'from': self.From.id,
+            'to': self.To.id,
+            'amount': self.amount,
+            'datetime': self.datetime.isoformat()
+        }
+
 
 class TransactionsHistory:
     """Класс для хранения истории транзакций, играющий роль БД.
@@ -121,16 +131,19 @@ class TransactionsHistory:
     Остальные классы менять при этом не придётся."""
 
     def __init__(self):
-        self._transactions: Set[Transaction] = set()
+        self._transactions: Dict[UUID, Transaction] = {}
 
     def save(self, transaction: Transaction) -> None:
         """Добавляет транзакцию в список транзакций.
         Если транзакция уже есть в списке, ничего не делает."""
-        self._transactions.add(transaction)
+        self._transactions[transaction.id] = transaction
 
     def see(self) -> List["Transaction"]:
         """Возвращает список транзакций, от самых старых к самым новым"""
-        return sorted(self._transactions)
+        return sorted(self._transactions.values())
+
+    def __getitem__(self, transaction_id: UUID) -> Transaction:
+        return self._transactions[transaction_id]
 
 
 class Account:
@@ -152,6 +165,14 @@ class Account:
     def __str__(self):
         return '*' + str(self.id)[-5:-1]
 
+    def info(self) -> Dict[str, Any]:
+        "Возвращает основную информацию о счёте (id, баланс, тип)"
+        return {
+            'id': self.id,
+            'balance': self.balance,
+            'type': self.__class__.__name__,
+        }
+
     def check_withdraw_permissions(self, transaction: "Transaction") -> "BoolWithReason": # pylint: disable=unused-argument
         """Проверяет, можно ли совершить транзакцию со счёта данного типа."""
         return NotImplemented
@@ -165,12 +186,12 @@ class DebitAccount(Account):
 
 class DepositAccount(Account):
     """Счёт, с которого нельзя выводить деньги до его окончания."""
-    def __init__(self, client: "Client", end_date: date):
+    def __init__(self, client: "Client", *, end_date: date):
         super().__init__(client)
         self.end_date = end_date
 
     def check_withdraw_permissions(self, transaction: "Transaction") -> "BoolWithReason":
-        if transaction.datetime < self.end_date:
+        if transaction.datetime.date() < self.end_date and transaction.amount > 0:
             return BoolWithReason("Can't withdraw money before end date\n")
         if self.balance < transaction.amount:
             return BoolWithReason("Not enough money\n")
@@ -192,7 +213,7 @@ class CreditAccount(Account):
             return BoolWithReason()
 
 class CashAccount(Account):
-    """Счёт - черная дыра. Служебный. 
+    """Счёт - черная дыра. Служебный.
     Является полем 'From' в операции внесения наличных и полем 'To' в операции снятия наличных."""
     def check_withdraw_permissions(self, transaction: "Transaction") -> "BoolWithReason":
         return BoolWithReason()
@@ -246,19 +267,34 @@ class ClientFacade:
     def __init__(self, client: "Client"):
         self.client = client
 
-    def create_account(self, account_type: Type["Account"], **kwargs) -> "Account":
-        """Создаёт счёт и записывает его в объекты банка и клиента."""
-        return self.client.create_account(account_type, **kwargs)
 
-    def withdraw(self, account: "Account", amount: int) -> "BoolWithReason":
+    def create_account(self, account_type: str, **kwargs) -> "Account":
+        """Создаёт счёт и записывает его в объекты банка и клиента."""
+        if account_type not in [cls.__name__ for cls in Account.__subclasses__()]:
+            raise ValueError("Unknown account type")
+        account_class = globals()[account_type]
+        return self.client.create_account(account_class, **kwargs)
+
+
+    def withdraw(self, account_id: UUID, amount: int) -> "BoolWithReason":
         """Создаёт транзакцию со счёта на наличные и выполняет её."""
+        if account_id not in self.client.accounts:
+            return BoolWithReason("Account not found\n")
+
+        account = self.client.accounts[account_id]
         return Transaction(account, self.client.default_cash_account, amount).perform()
 
-    def deposit(self, account: "Account", amount: int) -> "BoolWithReason":
+
+    def deposit(self, account_id: UUID, amount: int) -> "BoolWithReason":
         """Создаёт транзакцию внесения наличных на счёт и выполняет её."""
+        if account_id not in self.client.accounts:
+            return BoolWithReason("Account not found\n")
+
+        account = self.client.accounts[account_id]
         return Transaction(self.client.default_cash_account, account, amount).perform()
 
-    def transfer(self, from_account: "Account", to_account_id: UUID,
+
+    def transfer(self, from_account_id: UUID, to_account_id: UUID,
                  amount: int, to_bank: Bank | None = None) -> "BoolWithReason":
         """Создаёт транзакцию перевода средств по номеру счёта и выполняет её.
 
@@ -267,5 +303,19 @@ class ClientFacade:
         if to_bank is None:
             to_bank = self.client.bank
         if to_account_id not in to_bank.accounts:
-            raise ValueError("Reciever account not found")
-        return Transaction(from_account, to_bank.accounts[to_account_id], amount).perform()
+            return BoolWithReason("Reciever account not found\n")
+        if from_account_id not in self.client.accounts:
+            return BoolWithReason("Sender account not found\n")
+        return Transaction(self.client.accounts[from_account_id],
+                           to_bank.accounts[to_account_id], amount).perform()
+
+
+    def get_accounts(self) -> List[Account]:
+        """Список счетов клиента"""
+        return list(self.client.accounts.values())
+
+    def get_account_history(self, account_id: UUID) -> List[Transaction]:
+        """Возвращает список транзакций по счёту"""
+        if account_id not in self.client.accounts:
+            raise ValueError("Account not found")
+        return self.client.accounts[account_id].history.see()
