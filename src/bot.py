@@ -1,5 +1,3 @@
-from typing import Dict
-from uuid import UUID
 from aiogram import Bot, Dispatcher, types
 
 import sys

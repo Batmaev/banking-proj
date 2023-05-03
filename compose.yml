@@ -1,0 +1,7 @@
+services:
+  tgbot:
+    build: .
+    volumes:
+      - .:/app
+    command:
+      python3 /app/src/bot.py
