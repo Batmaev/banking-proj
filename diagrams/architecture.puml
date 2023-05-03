@@ -1,0 +1,43 @@
+@startuml architecture
+
+title Simplified Architecture
+
+skinparam actorStyle awesome
+left to right direction
+
+actor User
+
+package "Telegram bot" as TelegramBot {
+    component "bot.py" as botpy
+    package Dialogs {
+        component "Сценарий 1: авторизация" as auth
+        component "Сценарий 2: Открыть счёт" as open_account
+        component "Сценарий 3: ..." as scenario3
+
+        open_account -[hidden]> auth
+        scenario3 -[hidden]> open_account
+    }
+    botpy --> Dialogs
+}
+
+User --> botpy
+
+package json_bridge {
+    component get_bank_by_name
+    component get_client_by_id
+    component "вызвать метод из core.py" as call_method
+
+    get_client_by_id -[hidden]> get_bank_by_name
+    call_method -[hidden]> get_client_by_id
+}
+
+Dialogs ----> json_bridge
+
+package core {
+    component "Конструкторы"
+    component "Логика разрешений на снятие / пополнение"
+}
+
+json_bridge ---> core
+
+@enduml
