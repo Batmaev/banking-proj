@@ -1,7 +1,8 @@
 from aiogram import Bot, Dispatcher, types
 
-import sys
-sys.path.append('..')
+# add src to path
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
 from credentials import BOT_TOKEN
 
