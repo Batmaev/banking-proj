@@ -6,7 +6,6 @@
 которые в будущем можно заменить на БД."""
 
 from datetime import date
-from functools import wraps
 from typing import Dict
 from uuid import UUID, uuid4
 
@@ -23,31 +22,17 @@ class ClientFacadeDict(Dict[UUID, ClientFacade]):
     В будущем имеет смысл давать клиентам пароли вместо токенов,
     сохранять их хеши на диск, а также использовать сессионные куки."""
 
-class ServerState:
-    """Словари банков и клиентов с токенами.
-    Нужно инициализировать при запуске сервера — как и Flask().
 
-    На данный момент они нигде не хранятся, но теоретически могут быть на диске."""
-    def __init__(self):
-        self.banks = BankDict()
-        self.client_facades = ClientFacadeDict()
+# Инициализируются 1 раз при импорте
+banks = BankDict()
+client_facades = ClientFacadeDict()
 
-    def with_client_token(self, f):
-        """Декоратор, который проверяет, что запрос содержит токен клиента,
-        и передаёт client_facade вторым аргументом в оборачиваемую функцию"""
-        @wraps(f)
-        def wrapper(command: Dict, *args, **kwargs):
-            if 'client_token' not in command:
-                return {'status': 'error', 'message': 'No client token in request'}, 400
-            else:
-                uid = UUID(command['client_token'])
 
-            if uid not in self.client_facades:
-                return {'status': 'error', 'message': 'Invalid client token'}, 400
-            else:
-                return f(command, self.client_facades[uid], *args, **kwargs)
-        return wrapper
+def get_client_facade_by_token(token: str) -> ClientFacade | None:
+    return client_facades.get(UUID(token))
 
+def check_if_bank_exists(bank_name: str) -> bool:
+    return bank_name in banks
 
 
 class SuperuserCommands:
@@ -55,13 +40,13 @@ class SuperuserCommands:
     that ordinary clients can't use"""
 
     @staticmethod
-    def create_bank(command: Dict, banks: Dict[str, Bank]) -> Dict:
+    def create_bank(command: Dict) -> Dict:
         """Создаёт банк и записывает его в словарь banks.
         Принимает на вход JSON с обязательным ключом `name` (название банка)
         и опциональным ключом `unathorized_withdrawal_limit`"""
 
         if 'unathorized_withdrawal_limit' in command:
-            bank = Bank(command['unathorized_withdrawal_limit'])
+            bank = Bank(int(command['unathorized_withdrawal_limit']))
         else:
             bank = Bank()
         banks[command['name']] = bank
@@ -69,7 +54,7 @@ class SuperuserCommands:
 
 
     @staticmethod
-    def create_client(command: Dict, bank_app: ServerState) -> Dict:
+    def create_client(command: Dict) -> Dict:
         """Создаёт клиента и записывает его в словарь client_facades.
 
         Принимает на вход JSON с обязательными ключами `bank`, `name`, `surname`
@@ -77,12 +62,12 @@ class SuperuserCommands:
 
         Возвращает JSON с ключами `status`, `message` и `client_token`"""
 
-        bank = bank_app.banks[command['bank']]
+        bank = banks[command['bank']]
         client = Client(bank, command['name'], command['surname'],
                         command.get('passport'), command.get('address'))
         client_facade = ClientFacade(client)
         client_token = uuid4()
-        bank_app.client_facades[client_token] = client_facade
+        client_facades[client_token] = client_facade
         return {'status': 'ok', 'message': 'Created client', 'client_token': client_token}
 
 
@@ -104,7 +89,7 @@ class SuperuserCommands:
         Принимает на вход JSON с ключами `transaction_id` и `account_id`.
 
         `account_id` и `client_token`, который тоже должен быть в запросе,
-        нужны для того, чтобы убедиться, чтобы найти транзакцию
+        нужны для того, чтобы найти транзакцию
         (сейчас нет единого реестра транзакций)."""
 
         try:
@@ -173,7 +158,7 @@ class ClientCommands:
         Принимает на вход JSON с ключами `account_id` и `amount`"""
         try:
             account_id = UUID(command['account_id'])
-            amount = command['amount']
+            amount = int(command['amount'])
             result = client_facade.deposit(account_id, amount)
             assert result
             return {'status': 'ok', 'message': 'Deposited ' + str(amount)}
@@ -183,7 +168,7 @@ class ClientCommands:
             return {'status': 'error', 'message': repr(result)} # type: ignore
 
     @staticmethod
-    def transfer(command: Dict, client_facade: ClientFacade, banks: Dict[str, Bank]) -> Dict:
+    def transfer(command: Dict, client_facade: ClientFacade) -> Dict:
         """Переводит деньги с одного счёта на другой, передавая вызов в ClientFacade.
         Принимает на вход JSON с обязательными ключами `from_account_id`, `to_account_id`, `amount`
         и опциональным ключом `to_bank_name`. Если `to_bank_name` не указан, то предполагается,
