@@ -1,0 +1,15 @@
+stages:
+  - test
+
+test_job:
+  stage: test
+  tags:
+    - common
+  before_script:
+    - pip3 install -r requirements.txt
+  script:
+    - pytest tests --junitxml=report.xml
+  artifacts:
+    reports:
+      junit: report.xml
+    when: always
