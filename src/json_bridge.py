@@ -178,7 +178,8 @@ class ClientCommands:
             return {'status': 'error', 'message': repr(result)} # type: ignore
 
     @staticmethod
-    def transfer(command: Dict[str, str], client_facade: ClientFacade, server_state: ServerState) -> Dict:
+    def transfer(command: Dict[str, str],
+                 client_facade: ClientFacade, server_state: ServerState) -> Dict:
         """Переводит деньги с одного счёта на другой, передавая вызов в ClientFacade.
         Принимает на вход JSON с обязательными ключами `from_account_id`, `to_account_id`, `amount`
         и опциональным ключом `to_bank_name`. Если `to_bank_name` не указан, то предполагается,

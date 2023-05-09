@@ -1,9 +1,13 @@
+"""Основной модуль бота.
+Запускает бота и базу данных (если бы она была)."""
 from aiogram import Bot, Dispatcher, types
 
 from .credentials import BOT_TOKEN
 from .dialogs import for_superuser, for_client, for_both
 from .json_bridge import ServerState
 
+# pylint: disable=missing-function-docstring
+# pylint: disable=line-too-long
 
 
 
