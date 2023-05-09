@@ -112,6 +112,16 @@ class Transaction:
     def __repr__(self) -> str:
         return f'{str(self.From)} -> {str(self.To)}: {self.amount} at {self.datetime}'
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Transaction):
+            return False
+
+        return self.id == other.id \
+            and self.datetime == other.datetime \
+            and self.From.id == other.From.id \
+            and self.To.id == other.To.id \
+            and self.amount == other.amount
+
     def info(self) -> Dict:
         """Возвращает словарь с информацией о транзакции."""
         return {
@@ -191,12 +201,12 @@ class DepositAccount(Account):
         self.end_date = end_date
 
     def check_withdraw_permissions(self, transaction: "Transaction") -> "BoolWithReason":
+        answer = BoolWithReason()
         if transaction.datetime.date() < self.end_date and transaction.amount > 0:
-            return BoolWithReason("Can't withdraw money before end date\n")
+            answer = answer & BoolWithReason("Can't withdraw money before end date\n")
         if self.balance < transaction.amount:
-            return BoolWithReason("Not enough money\n")
-        else:
-            return BoolWithReason()
+            answer = answer & BoolWithReason("Not enough money\n")
+        return answer
 
 class CreditAccount(Account):
     """Счёт, в котором можно уходить в минус до определённого предела.
