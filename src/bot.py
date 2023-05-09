@@ -1,17 +1,15 @@
 from aiogram import Bot, Dispatcher, types
 
-# add src to path
-# import os, sys
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
-
 from .credentials import BOT_TOKEN
-
 from .dialogs import for_superuser, for_client, for_both
+from .json_bridge import ServerState
 
 
 
 
 async def main():
+
+    server_state = ServerState()
 
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
@@ -34,7 +32,7 @@ async def main():
         types.BotCommand(command = 'show_history', description = 'Доступно для клиента'),
     ])
 
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, server_state=server_state)
 
 
 if __name__ == '__main__':

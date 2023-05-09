@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from ..json_bridge import SuperuserCommands, check_if_bank_exists
+from ..json_bridge import ServerState, SuperuserCommands
 from .utils import sudo, clean_state_preserving_user
 
 
@@ -32,7 +32,7 @@ async def create_bank2(message: types.Message, state: FSMContext):
 
 
 @router.message(BankCreationState.wait_for_unathorized_withdrawal_limit)
-async def create_bank3(message: types.Message, state: FSMContext):
+async def create_bank3(message: types.Message, state: FSMContext, server_state: ServerState):
     if message.text is None:
         return
     try:
@@ -42,7 +42,7 @@ async def create_bank3(message: types.Message, state: FSMContext):
         return
     command = await state.get_data()
     command['unathorized_withdrawal_limit'] = limit
-    result = SuperuserCommands.create_bank(command)
+    result = SuperuserCommands.create_bank(command, server_state)
     await message.answer(str(result))
     await clean_state_preserving_user(state)
 
@@ -62,10 +62,10 @@ async def create_client1(message: types.Message, state: FSMContext):
     await state.set_state(ClientCreationState.wait_for_bank_name)
 
 @router.message(ClientCreationState.wait_for_bank_name)
-async def create_client2(message: types.Message, state: FSMContext):
+async def create_client2(message: types.Message, state: FSMContext, server_state: ServerState):
     if message.text is None:
         return
-    if not check_if_bank_exists(message.text):
+    if not message.text in server_state.banks:
         await message.answer('Банк с таким названием не существует')
         return
     await state.update_data({'bank': message.text})
@@ -89,10 +89,10 @@ async def create_client4(message: types.Message, state: FSMContext):
     await state.set_state(ClientCreationState.wait_for_client_passport)
 
 @router.message(ClientCreationState.wait_for_client_passport, Command('skip'))
-async def create_client5(message: types.Message, state: FSMContext):
-    result = SuperuserCommands.create_client(await state.get_data())
+async def create_client5(message: types.Message, state: FSMContext, server_state: ServerState):
+    result = SuperuserCommands.create_client(await state.get_data(), server_state)
     await message.answer(str(result))
-    await state.set_state(None)
+    await clean_state_preserving_user(state)
 
 @router.message(ClientCreationState.wait_for_client_passport)
 async def create_client6(message: types.Message, state: FSMContext):
@@ -103,13 +103,8 @@ async def create_client6(message: types.Message, state: FSMContext):
     await state.set_state(ClientCreationState.wait_for_client_address)
 
 @router.message(ClientCreationState.wait_for_client_address)
-async def create_client7(message: types.Message, state: FSMContext):
+async def create_client7(message: types.Message, state: FSMContext, server_state: ServerState):
     if message.text is None:
         return
-    command = await state.get_data()
-    command['address'] = message.text
-    result = SuperuserCommands.create_client(command)
-    await message.answer(str(result))
-    await clean_state_preserving_user(state)
-
-
+    await state.update_data({'address': message.text})
+    await create_client5(message, state, server_state)

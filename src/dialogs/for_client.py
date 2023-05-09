@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from ..core import ClientFacade
-from ..json_bridge import get_client_facade_by_token, ClientCommands
+from ..json_bridge import ServerState, ClientCommands
 from .utils import require_auth, clean_state_preserving_user
 
 
@@ -20,10 +20,10 @@ async def auth1(message: types.Message, state: FSMContext):
     await state.set_state(AuthState.wait_for_user_id)
 
 @router.message(AuthState.wait_for_user_id)
-async def auth2(message: types.Message, state: FSMContext):
+async def auth2(message: types.Message, state: FSMContext, server_state: ServerState):
     if message.text is None:
         return
-    if (client_facade := get_client_facade_by_token(message.text)) is None:
+    if (client_facade := server_state.get_client_facade_by_token(message.text)) is None:
         await message.answer('Неверный токен')
     else:
         await state.update_data({'client_facade': client_facade})
@@ -106,6 +106,10 @@ async def select_account(message: types.Message, state: FSMContext):
     data = await state.get_data()
     client_facade: ClientFacade = data['client_facade']
     accounts = ClientCommands.show_accounts({}, client_facade)['accounts']
+    if accounts == []:
+        await message.answer('У вас нет счетов')
+        await clean_state_preserving_user(state)
+        return
     await message.answer('Выберите счёт:', reply_markup=types.ReplyKeyboardMarkup(
         keyboard=[
             [types.KeyboardButton(text=str(account['id']))]
