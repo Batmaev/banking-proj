@@ -9,7 +9,7 @@ from datetime import date
 from typing import Dict
 from uuid import UUID, uuid4
 
-from core import Bank, Client, ClientFacade
+from .core import Bank, Client, ClientFacade
 
 
 class BankDict(Dict[str, Bank]):

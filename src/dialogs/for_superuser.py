@@ -3,8 +3,8 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from json_bridge import SuperuserCommands, check_if_bank_exists 
-from .utils import sudo, clean_state_preserving_user # pylint: disable=relative-beyond-top-level
+from ..json_bridge import SuperuserCommands, check_if_bank_exists
+from .utils import sudo, clean_state_preserving_user
 
 
 router = Router()

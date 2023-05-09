@@ -4,4 +4,4 @@ services:
     volumes:
       - .:/app
     command:
-      python3 /app/src/bot.py
+      python3 -m app.src.bot

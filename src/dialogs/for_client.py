@@ -3,9 +3,9 @@ from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from src.core import ClientFacade
-from json_bridge import get_client_facade_by_token, ClientCommands
-from .utils import require_auth, clean_state_preserving_user # pylint: disable=relative-beyond-top-level
+from ..core import ClientFacade
+from ..json_bridge import get_client_facade_by_token, ClientCommands
+from .utils import require_auth, clean_state_preserving_user
 
 
 router = Router()

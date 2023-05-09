@@ -1,12 +1,12 @@
 from aiogram import Bot, Dispatcher, types
 
 # add src to path
-import os, sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
+# import os, sys
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
-from credentials import BOT_TOKEN
+from .credentials import BOT_TOKEN
 
-from dialogs import for_superuser, for_client, for_both
+from .dialogs import for_superuser, for_client, for_both
 
 
 
