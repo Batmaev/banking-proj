@@ -311,9 +311,9 @@ class ClientFacade:
 
 
     def get_accounts(self) -> List[Account]:
-        """Список счетов клиента"""
-        return list(self.client.accounts.values())
-
+        """Список счетов клиента (за исключением служебного CashAccount)))"""
+        return [account for account in self.client.accounts.values()
+                if account != self.client.default_cash_account]
     def get_account_history(self, account_id: UUID) -> List[Transaction]:
         """Возвращает список транзакций по счёту"""
         if account_id not in self.client.accounts:

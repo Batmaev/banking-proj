@@ -3,7 +3,7 @@ from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from .utils import clean_state_preserving_user # pylint: disable=relative-beyond-top-level
+from .utils import clean_state_preserving_user
 
 router = Router()
 
