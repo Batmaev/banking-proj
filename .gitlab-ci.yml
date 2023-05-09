@@ -6,9 +6,11 @@ test_job:
   tags:
     - common
   before_script:
+    - apt-get update -y
+    - apt-get install -y python3-pip
     - pip3 install -r requirements.txt
   script:
-    - pytest tests --junitxml=report.xml
+    - pytest --junitxml=report.xml
   artifacts:
     reports:
       junit: report.xml
