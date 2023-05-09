@@ -48,7 +48,7 @@ class SuperuserCommands:
     that ordinary clients can't use"""
 
     @staticmethod
-    def create_bank(command: Dict, server_state: ServerState) -> Dict:
+    def create_bank(command: Dict[str, str], server_state: ServerState) -> Dict:
         """Создаёт банк и записывает его в словарь banks.
         Принимает на вход JSON с обязательным ключом `name` (название банка)
         и опциональным ключом `unathorized_withdrawal_limit`"""
@@ -62,7 +62,7 @@ class SuperuserCommands:
 
 
     @staticmethod
-    def create_client(command: Dict, server_state: ServerState) -> Dict:
+    def create_client(command: Dict[str, str], server_state: ServerState) -> Dict:
         """Создаёт клиента и записывает его в словарь client_facades.
 
         Принимает на вход JSON с обязательными ключами `bank`, `name`, `surname`
@@ -80,7 +80,7 @@ class SuperuserCommands:
 
 
     @staticmethod
-    def update_client(command: Dict, client_facade: ClientFacade) -> Dict:
+    def update_client(command: Dict[str, str], client_facade: ClientFacade) -> Dict:
         """Обновляет данные клиента по его токену.
         Принимает на вход JSON с ключами из подмножества `name`, `surname`, `passport`, `address`.
         Возвращает данные обновлённого клиента."""
@@ -92,7 +92,7 @@ class SuperuserCommands:
 
 
     @staticmethod
-    def cancel_transaction(command: Dict, client_facade: ClientFacade) -> Dict:
+    def cancel_transaction(command: Dict[str, str], client_facade: ClientFacade) -> Dict:
         """Отменяет транзакцию по её идентификатору.
         Принимает на вход JSON с ключами `transaction_id` и `account_id`.
 
@@ -146,12 +146,12 @@ class ClientCommands:
             return {'status': 'error', 'message': str(e)}
 
     @staticmethod
-    def withdraw(command: Dict, client_facade: ClientFacade) -> Dict:
+    def withdraw(command: Dict[str, str], client_facade: ClientFacade) -> Dict:
         """Снимает деньги со счёта, передавая вызов в ClientFacade.
         Принимает на вход JSON с ключами `account_id` и `amount`"""
         try:
             account_id = UUID(command['account_id'])
-            amount = command['amount']
+            amount = int(command['amount'])
             result = client_facade.withdraw(account_id, amount)
             assert result
             return {'status': 'ok', 'message': 'Withdrawn ' + str(amount)}
@@ -161,7 +161,7 @@ class ClientCommands:
             return {'status': 'error', 'message': repr(result)} # type: ignore
 
     @staticmethod
-    def deposit(command: Dict, client_facade: ClientFacade) -> Dict:
+    def deposit(command: Dict[str, str], client_facade: ClientFacade) -> Dict:
         """Пополняет счёт, передавая вызов в ClientFacade.
         Принимает на вход JSON с ключами `account_id` и `amount`"""
         try:
@@ -172,11 +172,13 @@ class ClientCommands:
             return {'status': 'ok', 'message': 'Deposited ' + str(amount)}
         except KeyError:
             return {'status': 'error', 'message': 'No account id or amount in request'}
+        except ValueError:
+            return {'status': 'error', 'message': 'Invalid amount / account id'}
         except AssertionError:
             return {'status': 'error', 'message': repr(result)} # type: ignore
 
     @staticmethod
-    def transfer(command: Dict, client_facade: ClientFacade, server_state: ServerState) -> Dict:
+    def transfer(command: Dict[str, str], client_facade: ClientFacade, server_state: ServerState) -> Dict:
         """Переводит деньги с одного счёта на другой, передавая вызов в ClientFacade.
         Принимает на вход JSON с обязательными ключами `from_account_id`, `to_account_id`, `amount`
         и опциональным ключом `to_bank_name`. Если `to_bank_name` не указан, то предполагается,
@@ -186,13 +188,15 @@ class ClientCommands:
             to_account_id = UUID(command['to_account_id'])
             to_bank_name = command.get('to_bank_name')
             to_bank = server_state.banks.get(to_bank_name) # type: ignore
-            amount = command['amount']
+            amount = int(command['amount'])
             result = client_facade.transfer(from_account_id, to_account_id, amount, to_bank)
             assert result
             return {'status': 'ok', 'message': 'Transferred ' + str(amount)}
         except KeyError:
             return {'status': 'error',
                     'message': 'No from_account_id / to_account_id or amount in request'}
+        except ValueError:
+            return {'status': 'error', 'message': 'Invalid amount / account id'}
         except AssertionError:
             return {'status': 'error', 'message': repr(result)} # type: ignore
 
@@ -204,7 +208,7 @@ class ClientCommands:
         return {'status': 'ok', 'message': '', 'accounts': accounts_info}
 
     @staticmethod
-    def show_history(command: Dict, client_facade: ClientFacade) -> Dict:
+    def show_history(command: Dict[str, str], client_facade: ClientFacade) -> Dict:
         """Отдаёт список транзакций (id, from, to, amount, datetime [ISO]).
 
         Принимает JSON с обязательным полем `account_id`."""

@@ -176,6 +176,8 @@ async def show_history(message: types.Message, state: FSMContext):
 @router.message(ShowHistoryState.wait_for_account_id)
 async def show_history2(message: types.Message, state: FSMContext):
     client_facade = (await state.get_data())['client_facade']
+    if message.text is None:
+        return
     result = ClientCommands.show_history({'account_id': message.text}, client_facade)
     await message.answer(str(result),reply_markup=types.ReplyKeyboardRemove(remove_keyboard=True))
     await clean_state_preserving_user(state)
